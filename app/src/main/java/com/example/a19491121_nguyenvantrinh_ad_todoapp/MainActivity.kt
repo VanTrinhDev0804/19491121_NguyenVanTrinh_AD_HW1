@@ -6,18 +6,13 @@ import android.os.Bundle
 import android.text.InputType
 import android.widget.EditText
 import android.widget.ImageView
-import android.widget.Toast
-import androidx.appcompat.app.AlertDialog
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.google.firebase.database.DatabaseReference
-import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.*
 
 class MainActivity : AppCompatActivity() {
     private lateinit var recyclerTaskView: RecyclerView
-    private lateinit var tasksList: ArrayList<TaskItem>
-    lateinit var statusTasks :Array<Int>
-    lateinit var nameTask :Array<String>
+    private val data: MutableList<DataTask> = mutableListOf()
     private var m_Text :String = "";
 
     private lateinit var database : DatabaseReference
@@ -25,6 +20,7 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
 
         recyclerTaskView = findViewById(R.id.recyclerViewTask)
         val btnAdd = findViewById<ImageView>(R.id.btnAdd)
@@ -34,7 +30,6 @@ class MainActivity : AppCompatActivity() {
 
         recyclerTaskView.layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
         recyclerTaskView.setHasFixedSize(true)
-        tasksList = arrayListOf<TaskItem>()
         getTaskData()
 
     }
@@ -54,7 +49,7 @@ class MainActivity : AppCompatActivity() {
         builder.setPositiveButton("OK", DialogInterface.OnClickListener { dialog, which ->
             // Here you get get input text from the Edittext
              m_Text = input.text.toString()
-            writeOrderOnDataBase(m_Text, false)
+            writeOrderOnDataBase(m_Text, "false")
         })
         builder.setNegativeButton("Cancel", DialogInterface.OnClickListener { dialog, which -> dialog.cancel() })
 
@@ -64,20 +59,43 @@ class MainActivity : AppCompatActivity() {
 
     private fun writeOrderOnDataBase(
         nameTask:String,
-        status: Boolean,
+        status: String,
     ) {
         database = FirebaseDatabase.getInstance().reference
-        var task = TaskItem( nameTask, status)
-        database.child("Task").push().child(nameTask).setValue(task)
+        var task = DataTask(nameTask, status)
+//        database.child("Task").push().child(id.toString()).setValue(task)
+        database.child("Task").push().setValue(task)
 
     }
 
     private fun getTaskData() {
-            var tasksitems =TaskItem("call mom",false)
-            var tasksitems2 =TaskItem("an com voi doi tac",false)
-            tasksList.add(tasksitems)
-            tasksList.add(tasksitems2)
-        recyclerTaskView.adapter = TaskAdapter(tasksList)
+        database = FirebaseDatabase.getInstance().getReference("Task")
+        database.addChildEventListener(object :ChildEventListener{
+            override fun onChildAdded(snapshot: DataSnapshot, previousChildName: String?) {
+                val tasks = snapshot.getValue(DataTask::class.java)
+                data.add(tasks!!)
+
+                recyclerTaskView.adapter?.notifyDataSetChanged()
+            }
+
+            override fun onChildChanged(snapshot: DataSnapshot, previousChildName: String?) {
+                TODO("Not yet implemented")
+            }
+
+            override fun onChildRemoved(snapshot: DataSnapshot) {
+                TODO("Not yet implemented")
+            }
+
+            override fun onChildMoved(snapshot: DataSnapshot, previousChildName: String?) {
+                TODO("Not yet implemented")
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+                TODO("Not yet implemented")
+            }
+
+        })
+        recyclerTaskView.adapter = TaskAdapter(data)
     }
 
 }

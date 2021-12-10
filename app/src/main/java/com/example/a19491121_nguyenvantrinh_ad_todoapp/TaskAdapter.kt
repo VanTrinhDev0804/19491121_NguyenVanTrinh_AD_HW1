@@ -3,11 +3,10 @@ package com.example.a19491121_nguyenvantrinh_ad_todoapp
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 
-class TaskAdapter  (private val tasksList :ArrayList<TaskItem>)
+class TaskAdapter(private val tasksList: MutableList<DataTask>)
     : RecyclerView.Adapter<TaskAdapter.TaskViewHolder>() {
 
 
@@ -19,7 +18,7 @@ class TaskAdapter  (private val tasksList :ArrayList<TaskItem>)
     override fun onBindViewHolder(holder: TaskAdapter.TaskViewHolder, position: Int) {
         var currentTask = tasksList[position]
         holder.name.text = currentTask.name
-        if(currentTask.status){
+        if(currentTask.status == "true"){
             holder.status.text = "Completed"
         }
         else{
