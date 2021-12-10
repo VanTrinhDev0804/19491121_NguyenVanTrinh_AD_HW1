@@ -1,11 +1,18 @@
 package com.example.a19491121_nguyenvantrinh_ad_todoapp
 
+import android.content.Context
 import android.content.DialogInterface
+import android.content.Intent
+import android.content.SharedPreferences
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.text.InputType
+import android.view.Menu
+import android.view.MenuItem
 import android.widget.EditText
 import android.widget.ImageView
+import android.widget.Toast
+import androidx.appcompat.app.ActionBar
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.database.*
@@ -20,7 +27,8 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-
+        val actionBar: ActionBar? = supportActionBar
+        actionBar?.setTitle("MainActivity")
 
         recyclerTaskView = findViewById(R.id.recyclerViewTask)
         val btnAdd = findViewById<ImageView>(R.id.btnAdd)
@@ -32,20 +40,40 @@ class MainActivity : AppCompatActivity() {
         recyclerTaskView.setHasFixedSize(true)
         getTaskData()
 
+
+    }
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        val inflater = menuInflater
+        inflater.inflate(R.menu.item_menu, menu)
+        return super.onCreateOptionsMenu(menu)
+    }
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when(item.itemId){
+            R.id.fixed -> {
+
+            }
+            R.id.deleted -> {
+
+            }
+            R.id.complete->{
+                Toast
+            }
+
+            else ->super.onOptionsItemSelected(item)
+        }
+
     }
 
     private fun showdialog(){
         val builder: android.app.AlertDialog.Builder = android.app.AlertDialog.Builder(this)
         builder.setTitle("Add New Task")
 
-// Set up the input
-        val input = EditText(this)
-// Specify the type of input expected; this, for example, sets the input as a password, and will mask the text
 
+        val input = EditText(this)
         input.inputType = InputType.TYPE_CLASS_TEXT
         builder.setView(input)
 
-// Set up the buttons
+
         builder.setPositiveButton("OK", DialogInterface.OnClickListener { dialog, which ->
             // Here you get get input text from the Edittext
              m_Text = input.text.toString()

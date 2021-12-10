@@ -25,6 +25,9 @@ class TaskAdapter(private val tasksList: MutableList<DataTask>)
             holder.status.text = " Not Completed"
         }
 
+        holder.itemView.setOnClickListener {
+
+        }
     }
 
     override fun getItemCount(): Int {
