@@ -47,22 +47,22 @@ class MainActivity : AppCompatActivity() {
         inflater.inflate(R.menu.item_menu, menu)
         return super.onCreateOptionsMenu(menu)
     }
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        return when(item.itemId){
-            R.id.fixed -> {
-
-            }
-            R.id.deleted -> {
-
-            }
-            R.id.complete->{
-                Toast
-            }
-
-            else ->super.onOptionsItemSelected(item)
-        }
-
-    }
+//    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+//        return when(item.itemId){
+//            R.id.fixed -> {
+//
+//            }
+//            R.id.deleted -> {
+//
+//            }
+//            R.id.complete->{
+//                Toast
+//            }
+//
+//            else ->super.onOptionsItemSelected(item)
+//        }
+//
+//    }
 
     private fun showdialog(){
         val builder: android.app.AlertDialog.Builder = android.app.AlertDialog.Builder(this)
@@ -77,7 +77,7 @@ class MainActivity : AppCompatActivity() {
         builder.setPositiveButton("OK", DialogInterface.OnClickListener { dialog, which ->
             // Here you get get input text from the Edittext
              m_Text = input.text.toString()
-            writeOrderOnDataBase(m_Text, "false")
+            writeTaskOnDataBase(m_Text, "false")
         })
         builder.setNegativeButton("Cancel", DialogInterface.OnClickListener { dialog, which -> dialog.cancel() })
 
@@ -85,7 +85,7 @@ class MainActivity : AppCompatActivity() {
     }
 
 
-    private fun writeOrderOnDataBase(
+    private fun writeTaskOnDataBase(
         nameTask:String,
         status: String,
     ) {
